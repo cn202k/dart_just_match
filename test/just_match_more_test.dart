@@ -8,6 +8,13 @@ class Bar {
       type(action);
 }
 
+class Int {
+  static Case<int, R> then<R>(
+    Action<int, R> action,
+  ) =>
+      type(action);
+}
+
 bool isNatural(int value) => 0 < value;
 
 bool isValidName(String value) =>
@@ -21,6 +28,7 @@ void main() {
     isNatural.then((it) => -it),
     isValidName.then((it) => it.length),
     Bar.then((it) => null),
+    Int.then((it) => null),
     otherwise(() => -1),
   ]);
 }
