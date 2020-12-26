@@ -2,8 +2,10 @@ import 'package:just_match/just_match.dart';
 
 class Bar {}
 
+bool isNatural(int value) => 0 < value;
+
 void main() {
-  final target = 100;
+  final Object target = 100;
   final num result = match(target, [
     // it == '3.14'
     value('3.14', (String it) => double.parse(it)),
@@ -17,6 +19,7 @@ void main() {
     type((List<int> it) => it.reduce((p, e) => p + e)),
     // it is Bar == true
     type((Bar it) => null),
+    cond(isNatural, (int it) => -it),
     otherwise(() => -1),
   ]);
 }

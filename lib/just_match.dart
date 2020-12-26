@@ -4,6 +4,8 @@ typedef Action0<R> = R Function();
 
 typedef Action<T, R> = R Function(T it);
 
+typedef Cond<T> = bool Function(T it);
+
 abstract class Case<T, R> {
   bool match(Object target);
   R eval(Object target);
@@ -46,6 +48,20 @@ class OtherwiseCase<R> extends Case<Object, R> {
   R eval(Object target) => _action();
 }
 
+class CondCase<T, R> extends Case<T, R> {
+  final Cond<T> _condition;
+  final Action<T, R> _action;
+
+  CondCase._(this._condition, this._action);
+
+  @override
+  bool match(Object target) =>
+      target is T && _condition(target);
+
+  @override
+  R eval(Object target) => _action(target as T);
+}
+
 Case<T, R> value<T, R>(T pattern, Action<T, R> action) =>
     ValueCase<T, R>._(pattern, action);
 
@@ -55,7 +71,12 @@ Case<T, R> type<T, R>(Action<T, R> action) =>
 Case<Object, R> otherwise<R>(Action0<R> action) =>
     OtherwiseCase<R>._(action);
 
-R match<T, R>(Object target, List<Case<T, R>> cases) =>
+Case<T, R> cond<T, R>(
+        Cond<T> condition, Action<T, R> action) =>
+    CondCase<T, R>._(condition, action);
+
+R match<T, P extends T, R>(
+        T target, List<Case<P, R>> cases) =>
     cases
         .firstWhere(
           (it) => it.match(target),
