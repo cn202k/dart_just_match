@@ -1,6 +1,6 @@
 # just_match
 
-`just_match` **just** provides a naive pattern **match**ing for Dart.
+`just_match` *just* provides a naive pattern *match*ing for Dart.
 
 ```dart
 import 'package:just_match/just_match.dart';
@@ -8,6 +8,8 @@ import 'package:just_match/just_match_ext.dart';
 
 void main() {
   print(interpret(100)); // 'The value is 100'
+  print(interpret(Bar())); // 'The value is a Bar'
+  print(interpret('Bob')); // "I'm sorry, I can't understand"
 }
 
 String interpret(Object value) {
@@ -21,10 +23,7 @@ String interpret(Object value) {
 }
 
 class Bar {
-  static Case<Bar, R> then<R>(
-    Action<Bar, R> action,
-  ) =>
-      type(action);
+  static Case<Bar, R> then<R>(Action<Bar, R> action) => type(action);
 }
 
 bool isValidUserName(String value) =>
