@@ -29,11 +29,12 @@ Case<T, R> cond<T, R>(
         Cond<T> condition, Action<T, R> action) =>
     Case<T, R>(condition, action);
 
-R match<T, R>(
-        Object target, List<Case<T, R>> cases) =>
+R match<T, R>(Object target, List<Case<T, R>> cases) =>
     cases
         .firstWhere(
           (it) => it.match(target),
-          orElse: () => throw Exception(),
+          orElse: () => throw StateError(
+            "Unhandled case '$target'",
+          ),
         )
         .eval(target);
