@@ -1,25 +1,43 @@
 import 'package:just_match/just_match.dart';
-
-class Bar {}
-
-bool isNatural(int value) => 0 < value;
+import 'package:test/test.dart';
 
 void main() {
-  final Object target = 100;
-  final num result = match(target, [
-    // it == '3.14'
-    value('3.14', (String it) => double.parse(it)),
-    // it == 109
-    value(109, (int it) => it),
-    // it is String == true
-    type((String it) => null),
-    // it is List<String> == true
-    type((List<String> it) => null),
-    // it is List<int> == true
-    type((List<int> it) => it.reduce((p, e) => p + e)),
-    // it is Bar == true
-    type((Bar it) => null),
-    cond(isNatural, (int it) => -it),
-    otherwise(() => -1),
-  ]);
+  test('value', () {
+    final x = 10;
+    final result = match(x, [
+      value(0, (int it) => 'x is 0'),
+      value(10, (int it) => 'x is 10'),
+    ]);
+    expect(result, 'x is 10');
+  });
+
+  test('cond', () {
+    final isNatural = (int value) => value > 0;
+    final isNegative = (int value) => value < 0;
+    final x = 10;
+    final result = match(x, [
+      cond(isNegative, (int it) => 'x is a negative number'),
+      cond(isNatural, (int it) => 'x is a natural number'),
+    ]);
+    expect(result, 'x is a natural number');
+  });
+
+  test('type', () {
+    final Object x = [1, 2, 3];
+    final result = match(x, [
+      type((String it) => 'x is String'),
+      type((int it) => 'x is int'),
+      type((List<int> it) => 'x is List<int>')
+    ]);
+    expect(result, 'x is List<int>');
+  });
+
+  test('otherwise', () {
+    final x = 10;
+    final result = match(x, [
+      value(0, (int it) => 'x is 0'),
+      otherwise(() => 'unkown'),
+    ]);
+    expect(result, 'unkown');
+  });
 }

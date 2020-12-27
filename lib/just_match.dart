@@ -29,8 +29,8 @@ Case<T, R> cond<T, R>(
         Cond<T> condition, Action<T, R> action) =>
     Case<T, R>(condition, action);
 
-R match<T, P extends T, R>(
-        T target, List<Case<P, R>> cases) =>
+R match<T, R>(
+        Object target, List<Case<T, R>> cases) =>
     cases
         .firstWhere(
           (it) => it.match(target),
