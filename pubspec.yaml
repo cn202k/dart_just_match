@@ -1,8 +1,7 @@
 name: just_match
-description: A new Flutter package project.
+description: A naive pattern matching for Dart.
 version: 0.0.1
-author:
-homepage:
+repository: https://github.com/cn202k/dart_just_match.git
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
